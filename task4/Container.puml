@@ -1,0 +1,28 @@
+@startuml
+title Container Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "User", "A client of the bank")
+Person(operator, "Operator", "Operator of call-center")
+
+Container_Boundary(IT_System, "Rate info system") {
+  Container(S3, "S3 storage", "S3 storage", "Storage Excel files")
+  Container(CRM, "CRM", "React, Java Spring, Postgres")
+}
+
+System_Ext(CRM_ext, "External CRM system")
+
+
+Rel(user, CRM, "Call to call-center")
+Rel(user, CRM_ext, "Call to call-center")
+
+Rel(operator, CRM, "Receive calls from clients")
+Rel(operator, CRM_ext, "Receive calls from clients")
+
+Rel(CRM, S3, "Request files with rates")
+Rel(CRM_ext, S3, "Request files with rates")
+
+@enduml
