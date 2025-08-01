@@ -7,14 +7,15 @@ top to bottom direction
 
 Person(user, "User", "A client of the bank")
 
-System(IT_System, "MVP", "System for submitting applications for deposits and credits")
+System(IT_System, "MVP", "System for submitting applications for deposits")
 
-Container_Boundary(IT_System, "FitLife System") {
-  Container(WebApp, "Web Application", "ASP.NET, MS SQL", "Allows users to create and view applications for deposits and credits")
-  Container(Site, "Site", "React, PHP", "Allows users to create and view applications for deposits and credits")
+Container_Boundary(IT_System, "Bank Standart System") {
+  Container(WebApp, "Web Application", "ASP.NET, MS SQL", "Allows users to create and view applications for deposits")
+  Container(Site, "Site", "React, PHP", "Allows users to create and view applications for deposits")
   Container(ABS, "Automation bank system", "Delphi, Oracle", "Bank operations")
   Container(S3, "S3 storage", "S3 storage", "Storage Excel files")
   Container(Kafka, "Kafka", "Kafka", "Message queue")
+  Container(Redis, "Redis Cache", "Redis", "Caching layer for session data and applications information")
 }
 
 System_Ext(api, "SMS provider API", "External API for sending SMS")
@@ -34,4 +35,7 @@ Rel(ABS, Kafka, "Read messages to create applications")
 
 Rel(WebApp,api,"Send SMS with code")
 Rel(Site,api,"Send SMS with code")
+
+Rel(WebApp, Redis, "Cache session data\nCache deposit applications", "TCP")
+Rel(Site, Redis, "Cache session data\nCache deposit applications", "TCP")
 @enduml
